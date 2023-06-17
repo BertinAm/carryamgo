@@ -151,6 +151,19 @@ class Order(models.Model):
                 seller=self.seller,
             )
 
+    def to_dict(self):
+        return {
+            'order_id': self.order_id,
+            'order_quantity': self.order_quantity,
+            'order_price': self.calculate_order_price(),
+            'order_status': self.order_status,
+            'product_price': self.product.product_price,
+            'buyer': self.buyer.user.username,
+            'product': self.product.product_name,
+            'seller': self.seller.user.username,
+            'created_at': self.created_at,
+        }
+
 
 class Message(models.Model):
     message_id = models.AutoField(primary_key=True)
