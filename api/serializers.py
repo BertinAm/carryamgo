@@ -53,11 +53,20 @@ class OrderSerializer(serializers.ModelSerializer):
     product = serializers.ReadOnlyField(source='product.product_name')
     seller = serializers.ReadOnlyField(source='seller.user.username')
     product_price = serializers.ReadOnlyField(source='product.product_price')
+    product_image = serializers.SerializerMethodField()
 
     class Meta:
         model = Order
         fields = ['order_id', 'order_quantity', 'order_price', 'order_status', 'product_price',
-                  'buyer', 'product', 'seller', 'created_at']
+                  'buyer', 'product', 'seller', 'product_image', 'created_at']
+
+    def get_product_image(self, instance):
+        return instance.product.product_image.url if instance.product.product_image else None
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['product_image'] = self.get_product_image(instance)
+        return representation
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
