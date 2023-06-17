@@ -49,14 +49,22 @@ class ProductSerializer(serializers.ModelSerializer):
 
 
 class OrderSerializer(serializers.ModelSerializer):
-    buyer = serializers.CharField(source='buyer.user.username', read_only=True)
-    product = serializers.CharField(source='product.product_name', read_only=True)
-    seller = serializers.CharField(source='seller.user.username', read_only=True)
+    product_price = serializers.SerializerMethodField()
 
     class Meta:
         model = Order
         fields = ['order_id', 'order_quantity', 'order_price', 'order_status',
-                  'product_price', 'buyer', 'product', 'seller']
+                  'product_price', 'buyer', 'product', 'seller', 'created_at']
+        read_only_fields = ['order_price']
+
+    def get_product_price(self, obj):
+        return obj.product.product_price
+
+    def create(self, validated_data):
+        order = Order.objects.create(**validated_data)
+        order.product.decrease_quantity(order.order_quantity)
+        return order
+
 
 
 class MessageSerializer(serializers.ModelSerializer):
