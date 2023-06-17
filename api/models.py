@@ -110,6 +110,11 @@ class Product(models.Model):
             'created_at': self.created_at,
         }
 
+    def decrease_quantity(self, quantity):
+        if self.product_quantity >= quantity:
+            self.product_quantity -= quantity
+            self.save()
+
 
 class Order(models.Model):
     order_id = models.AutoField(primary_key=True)
@@ -126,6 +131,7 @@ class Order(models.Model):
         self.product_price = self.product.product_price
         self.order_price = self.calculate_order_price()
         super().save(*args, **kwargs)
+        self.product.decrease_quantity(self.order_quantity)
 
     def calculate_order_price(self):
         final_price = self.order_quantity * self.product_price
