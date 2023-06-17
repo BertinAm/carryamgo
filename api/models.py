@@ -119,6 +119,7 @@ class Product(models.Model):
 class Order(models.Model):
     order_id = models.AutoField(primary_key=True)
     order_quantity = models.IntegerField(blank=False)
+    order_price = models.IntegerField(blank=False, default=0)
     order_status = models.CharField(max_length=100, default='Pending')
     buyer = models.ForeignKey(Buyer, on_delete=models.CASCADE, related_name='orders')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='orders')
@@ -126,28 +127,30 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
+        self.product_price = self.product.product_price
+        self.order_price = self.calculate_order_price()
         super().save(*args, **kwargs)
         self.product.decrease_quantity(self.order_quantity)
+
+    def calculate_order_price(self):
+        final_price = self.order_quantity * self.product_price
+        return final_price
 
     def __str__(self):
         return self.order_status
 
     def to_dict(self):
-        product_price = self.product.product_price
-        order_price = self.order_quantity * product_price
-
         return {
             'order_id': self.order_id,
             'order_quantity': self.order_quantity,
-            'order_price': order_price,
+            'order_price': self.order_price,
             'order_status': self.order_status,
-            'product_price': product_price,
+            'product_price': self.product.product_price,
             'buyer': self.buyer.user.username,
             'product': self.product.product_name,
             'seller': self.seller.user.username,
             'created_at': self.created_at,
         }
-
 
 
 
