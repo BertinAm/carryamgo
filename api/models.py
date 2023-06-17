@@ -121,6 +121,7 @@ class Order(models.Model):
     order_quantity = models.IntegerField(blank=False)
     order_price = models.IntegerField(blank=False, default=0)
     order_status = models.CharField(max_length=100, default='Pending')
+    product_price = models.IntegerField(blank=False, default=0)
     buyer = models.ForeignKey(Buyer, on_delete=models.CASCADE, related_name='orders')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='orders')
     seller = models.ForeignKey(Seller, on_delete=models.CASCADE, related_name='orders', default=None)
