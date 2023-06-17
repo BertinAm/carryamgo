@@ -93,6 +93,18 @@ class Product(models.Model):
                 seller=self.seller,
             )
 
+    def to_dict(self):
+        return {
+            'product_id': self.product_id,
+            'product_name': self.product_name,
+            'product_price': self.product_price,
+            'product_quantity': self.product_quantity,
+            'product_image': self.product_image.url if self.product_image else None,
+            'shop': self.shop.shop_name,
+            'seller': self.seller.user.username,
+            'created_at': self.created_at,
+        }
+
 
 class Order(models.Model):
     order_id = models.AutoField(primary_key=True)

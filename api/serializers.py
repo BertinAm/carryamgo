@@ -4,7 +4,7 @@ from .models import Seller, Buyer, Rating, Shop, Product, Order, Message, Notifi
 
 
 class SellerSerializer(serializers.ModelSerializer):
-    id=serializers.ReadOnlyField(source='user.id')
+    id = serializers.ReadOnlyField(source='user.id')
     email = serializers.ReadOnlyField(source='user.email')
     username = serializers.ReadOnlyField(source='user.username')
     password = serializers.ReadOnlyField(source='user.password')
@@ -38,9 +38,13 @@ class ShopSerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
+    shop_name = serializers.CharField(source='shop.shop_name', read_only=True)
+    seller_name = serializers.CharField(source='seller.user.username', read_only=True)
+
     class Meta:
         model = Product
-        fields = '__all__'
+        fields = ['product_id', 'product_name', 'product_price', 'product_quantity',
+                  'product_image', 'shop_name', 'seller_name']
 
 
 class OrderSerializer(serializers.ModelSerializer):
