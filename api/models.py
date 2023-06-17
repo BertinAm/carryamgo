@@ -131,7 +131,8 @@ class Order(models.Model):
         self.product_price = self.product.product_price
         self.order_price = self.calculate_order_price()
         super().save(*args, **kwargs)
-        self.product.decrease_quantity(self.order_quantity)
+        self.product.product_quantity -= self.order_quantity
+        self.product.save()
 
     def calculate_order_price(self):
         final_price = self.order_quantity * self.product_price
@@ -146,7 +147,7 @@ class Order(models.Model):
             'order_quantity': self.order_quantity,
             'order_price': self.order_price,
             'order_status': self.order_status,
-            'product_price': self.product.product_price,
+            'product_price': self.product_price,
             'buyer': self.buyer.user.username,
             'product': self.product.product_name,
             'seller': self.seller.user.username,
