@@ -121,7 +121,6 @@ class Order(models.Model):
     order_quantity = models.IntegerField(blank=False)
     order_price = models.IntegerField(blank=False, default=0)
     order_status = models.CharField(max_length=100, default='Pending')
-    product_price = models.IntegerField(blank=False, default=0)
     buyer = models.ForeignKey(Buyer, on_delete=models.CASCADE, related_name='orders')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='orders')
     seller = models.ForeignKey(Seller, on_delete=models.CASCADE, related_name='orders', default=None)
@@ -140,29 +139,19 @@ class Order(models.Model):
     def __str__(self):
         return self.order_status
 
-    def save(self, *args, **kwargs):
-        created = not self.pk  # Check if the order is being created
-        super().save(*args, **kwargs)
-        if created:
-            Notification.objects.create(
-                notification_type='order',
-                notification='New order made',
-                buyer=self.buyer,
-                seller=self.seller,
-            )
-
     def to_dict(self):
         return {
             'order_id': self.order_id,
             'order_quantity': self.order_quantity,
-            'order_price': self.calculate_order_price(),
+            'order_price': self.order_price,
             'order_status': self.order_status,
-            'product_price': self.product.product_price,
+            'product_price': self.product_price,
             'buyer': self.buyer.user.username,
             'product': self.product.product_name,
             'seller': self.seller.user.username,
             'created_at': self.created_at,
         }
+
 
 
 class Message(models.Model):
