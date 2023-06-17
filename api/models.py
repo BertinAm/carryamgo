@@ -93,6 +93,10 @@ class Product(models.Model):
                 seller=self.seller,
             )
 
+    @property
+    def name_market(self):
+        return self.seller.name_market
+
     def to_dict(self):
         return {
             'product_id': self.product_id,
@@ -102,6 +106,7 @@ class Product(models.Model):
             'product_image': self.product_image.url if self.product_image else None,
             'shop': self.shop.shop_name,
             'seller': self.seller.user.username,
+            'name_market': self.name_market,
             'created_at': self.created_at,
         }
 

@@ -40,11 +40,13 @@ class ShopSerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     shop_name = serializers.CharField(source='shop.shop_name', read_only=True)
     seller_name = serializers.CharField(source='seller.user.username', read_only=True)
+    name_market = serializers.CharField(source='seller.name_market', read_only=True)
 
     class Meta:
         model = Product
         fields = ['product_id', 'product_name', 'product_price', 'product_quantity',
-                  'product_image', 'shop_name', 'seller_name']
+                  'product_image', 'shop_name', 'seller_name', 'name_market']
+
 
 
 class OrderSerializer(serializers.ModelSerializer):
