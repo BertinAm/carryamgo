@@ -59,6 +59,11 @@ class OrderSerializer(serializers.ModelSerializer):
         fields = ['order_id', 'order_quantity', 'order_price', 'order_status', 'product_price',
                   'buyer', 'product', 'seller', 'created_at']
 
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['order_price'] = instance.calculate_order_price()
+        return representation
+
 
 class MessageSerializer(serializers.ModelSerializer):
     class Meta:
