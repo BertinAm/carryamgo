@@ -49,14 +49,14 @@ class ProductSerializer(serializers.ModelSerializer):
 
 
 class OrderSerializer(serializers.ModelSerializer):
-    buyer = serializers.CharField(source='buyer.user.username', read_only=True)
-    product = serializers.CharField(source='product.product_name', read_only=True)
-    seller = serializers.CharField(source='seller.user.username', read_only=True)
+    buyer = serializers.ReadOnlyField(source='buyer.user.username')
+    product = serializers.ReadOnlyField(source='product.product_name')
+    seller = serializers.ReadOnlyField(source='seller.user.username')
 
     class Meta:
         model = Order
-        fields = ['order_id', 'order_quantity', 'order_price', 'order_status',
-                  'product_price', 'buyer', 'product', 'seller', 'created_at']
+        fields = ['order_id', 'order_quantity', 'order_price', 'order_status', 'product_price',
+                  'buyer', 'product', 'seller', 'created_at']
 
 
 class MessageSerializer(serializers.ModelSerializer):
