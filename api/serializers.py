@@ -52,6 +52,7 @@ class OrderSerializer(serializers.ModelSerializer):
     buyer = serializers.ReadOnlyField(source='buyer.user.username')
     product = serializers.ReadOnlyField(source='product.product_name')
     seller = serializers.ReadOnlyField(source='seller.user.username')
+    product_price = serializers.ReadOnlyField(source='product.product_price')
 
     class Meta:
         model = Order
