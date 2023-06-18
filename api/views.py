@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.hashers import make_password
 from django.utils.crypto import get_random_string
-from rest_framework.permissions import IsAuthenticated
+# from rest_framework.permissions import IsAuthenticated
 
 from .models import Seller, Buyer, Rating, Shop, Product, Order, Message, Notification, Promotion, Subscription
 from .serializers import (

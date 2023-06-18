@@ -75,7 +75,7 @@ class Product(models.Model):
     product_name = models.CharField(max_length=100)
     product_price = models.IntegerField(blank=False)
     product_quantity = models.IntegerField(blank=False)
-    product_image = models.ImageField(upload_to='media/Product Image/', blank=True)
+    product_image = models.ImageField(upload_to='Product Image/', blank=True)
     shop = models.ForeignKey(Shop, on_delete=models.CASCADE, default=1)
     seller = models.ForeignKey(Seller, on_delete=models.CASCADE, related_name='products')
     created_at = models.DateTimeField(auto_now_add=True)
