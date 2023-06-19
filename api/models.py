@@ -16,6 +16,13 @@ class User(AbstractUser):
     id = models.AutoField(primary_key=True)
     first_name = models.CharField(max_length=30, null=True, blank=True)
     last_name = models.CharField(max_length=150, null=True, blank=True)
+    def set_password(self, raw_password):
+        hashed_password = bcrypt.hashpw(raw_password.encode('utf-8'), bcrypt.gensalt())
+        self.password = hashed_password.decode('utf-8')
+
+    def check_password(self, raw_password):
+        expected_hash = self.password.encode('utf-8')
+        return bcrypt.checkpw(raw_password.encode('utf-8'), expected_hash)
 
 
 class Seller(models.Model):
